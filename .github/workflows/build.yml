@@ -18,8 +18,13 @@ jobs:
       with:
         go-version: '1.21'
     
-    - name: Download dependencies and create go.sum
-      run: go mod tidy
+    - name: Let Go find the latest working version
+      run: |
+        go mod init netwatch-agent
+        go get github.com/go-routeros/routeros@latest
+        go get github.com/melbahja/goph@v1.4.0
+        go get github.com/pkg/errors@v0.9.1
+        go get golang.org/x/crypto@v0.21.0
     
     - name: Build
       run: go build -o netwatch-agent.exe .
