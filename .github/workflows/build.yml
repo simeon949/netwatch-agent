@@ -1,0 +1,33 @@
+name: Build NetWatch Agent
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Create Windows executable
+      run: |
+        npm install -g pkg
+        pkg package.json --targets node18-win-x64 --output netwatch-agent.exe
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: netwatch-agent-windows
+        path: netwatch-agent.exe
